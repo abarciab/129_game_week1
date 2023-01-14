@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
     void FollowPlayers()
     {
         Vector3 total = Vector3.zero;
-        foreach (var p in players) total += p.heldItemRB.transform.position;
+        foreach (var p in players) total += p.heldItemGO.transform.position;
         Vector3 targetPos = total / players.Count;
         targetPos.z = transform.position.z;
         transform.position = Vector3.Lerp(transform.position, targetPos, panSmoothness);
@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
     {
         bool allVisible = true;
         foreach (var p in players) {
-            var viewPos = cam.WorldToViewportPoint(p.heldItemRB.transform.position);
+            var viewPos = cam.WorldToViewportPoint(p.heldItemGO.transform.position);
             if (cam.orthographicSize < sizeMinMax.y && (viewPos.x < 0 || viewPos.x > 1 || viewPos.y < 0 || viewPos.y > 1)) {
                 cam.orthographicSize += zoomSpeed;
                 allVisible = false;
@@ -46,7 +46,7 @@ public class CameraController : MonoBehaviour
         }
         if (!allVisible) return;
         foreach (var p in players) {
-            var viewPos = cam.WorldToViewportPoint(p.heldItemRB.transform.position);
+            var viewPos = cam.WorldToViewportPoint(p.heldItemGO.transform.position);
             if (cam.orthographicSize > sizeMinMax.x && viewPos.x >= 0.25f && viewPos.x < 0.75 && viewPos.y > 0.25f && viewPos.y < 0.75f) {
                 cam.orthographicSize -= zoomSpeed;
                 allVisible = false;

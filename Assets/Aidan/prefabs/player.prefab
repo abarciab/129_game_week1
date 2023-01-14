@@ -98,16 +98,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f744f7545800a34da0a77f660b0ff28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1050
+  speed: 8
   maxItemDist: 5
   minDist: 2
   smoothness: 0.1
   playerPosOffset: {x: 2, y: -3}
-  brickHeight: 0.08
+  brickHeight: 0.025
   currentItem: 0
+  dataDisplay: {fileID: 0}
   heldItemPrefab: {fileID: 2448028366722993204, guid: ba1be51bd66c5a74bb69bd45e9e6a2e7, type: 3}
   brickPrefab: {fileID: 5517081590732063391, guid: ba6990390c2d8564f8b2be164644f54b, type: 3}
-  heldItemRB: {fileID: 0}
+  heldItemGO: {fileID: 0}
 --- !u!114 &3140469376720693712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,13 +167,69 @@ MonoBehaviour:
     m_ActionId: 4a671483-7a94-46f0-8d38-904518fbca70
     m_ActionName: Gameplay/Place[/XInputControllerWindows/buttonSouth]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: a200d25e-1286-4a13-92b1-392268fbfdfa
     m_ActionName: Gameplay/RotateLeft[/XInputControllerWindows/leftTrigger]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: be92a467-2924-4b64-a766-97e169153c88
     m_ActionName: Gameplay/RotateRight[/XInputControllerWindows/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2156268990559507150}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: HoldNextItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: aff97804-ca84-4b24-9665-4bf9c95655a3
+    m_ActionName: Gameplay/NextItem[/XInputControllerWindows/rightShoulder,/XInputControllerWindows1/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2156268990559507150}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: HoldPreviousItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 06596642-016d-47bb-987e-326d7bd0dbb0
+    m_ActionName: Gameplay/PrevItem[/XInputControllerWindows/leftShoulder,/XInputControllerWindows1/leftShoulder]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay

@@ -62,6 +62,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""aff97804-ca84-4b24-9665-4bf9c95655a3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrevItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""06596642-016d-47bb-987e-326d7bd0dbb0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -108,6 +126,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""RotateRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""29955f68-fee9-4fed-906b-dcac7ccb50dd"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""01b8cee6-d35e-4980-be02-5abdfee3f2f0"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrevItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -120,6 +160,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_Place = m_Gameplay.FindAction("Place", throwIfNotFound: true);
         m_Gameplay_RotateLeft = m_Gameplay.FindAction("RotateLeft", throwIfNotFound: true);
         m_Gameplay_RotateRight = m_Gameplay.FindAction("RotateRight", throwIfNotFound: true);
+        m_Gameplay_NextItem = m_Gameplay.FindAction("NextItem", throwIfNotFound: true);
+        m_Gameplay_PrevItem = m_Gameplay.FindAction("PrevItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -183,6 +225,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Place;
     private readonly InputAction m_Gameplay_RotateLeft;
     private readonly InputAction m_Gameplay_RotateRight;
+    private readonly InputAction m_Gameplay_NextItem;
+    private readonly InputAction m_Gameplay_PrevItem;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -191,6 +235,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Place => m_Wrapper.m_Gameplay_Place;
         public InputAction @RotateLeft => m_Wrapper.m_Gameplay_RotateLeft;
         public InputAction @RotateRight => m_Wrapper.m_Gameplay_RotateRight;
+        public InputAction @NextItem => m_Wrapper.m_Gameplay_NextItem;
+        public InputAction @PrevItem => m_Wrapper.m_Gameplay_PrevItem;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -212,6 +258,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @RotateRight.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateRight;
                 @RotateRight.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateRight;
                 @RotateRight.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateRight;
+                @NextItem.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNextItem;
+                @NextItem.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNextItem;
+                @NextItem.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNextItem;
+                @PrevItem.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrevItem;
+                @PrevItem.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrevItem;
+                @PrevItem.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrevItem;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -228,6 +280,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @RotateRight.started += instance.OnRotateRight;
                 @RotateRight.performed += instance.OnRotateRight;
                 @RotateRight.canceled += instance.OnRotateRight;
+                @NextItem.started += instance.OnNextItem;
+                @NextItem.performed += instance.OnNextItem;
+                @NextItem.canceled += instance.OnNextItem;
+                @PrevItem.started += instance.OnPrevItem;
+                @PrevItem.performed += instance.OnPrevItem;
+                @PrevItem.canceled += instance.OnPrevItem;
             }
         }
     }
@@ -238,5 +296,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnPlace(InputAction.CallbackContext context);
         void OnRotateLeft(InputAction.CallbackContext context);
         void OnRotateRight(InputAction.CallbackContext context);
+        void OnNextItem(InputAction.CallbackContext context);
+        void OnPrevItem(InputAction.CallbackContext context);
     }
 }
