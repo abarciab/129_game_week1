@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2156268990559507148}
   - component: {fileID: 2156268990559507151}
-  - component: {fileID: 2156268990559507150}
   - component: {fileID: 3140469376720693712}
+  - component: {fileID: 2156268990559507150}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2156268990559507137}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.27, y: 2.19, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -86,29 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2156268990559507150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2156268990559507137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f744f7545800a34da0a77f660b0ff28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 8
-  maxItemDist: 5
-  minDist: 2
-  smoothness: 0.1
-  playerPosOffset: {x: 2, y: -3}
-  brickHeight: 0.025
-  currentItem: 0
-  dataDisplay: {fileID: 0}
-  heldItemPrefab: {fileID: 2448028366722993204, guid: ba1be51bd66c5a74bb69bd45e9e6a2e7, type: 3}
-  brickPrefab: {fileID: 5517081590732063391, guid: ba6990390c2d8564f8b2be164644f54b, type: 3}
-  heldItemGO: {fileID: 0}
 --- !u!114 &3140469376720693712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,13 +145,13 @@ MonoBehaviour:
     m_ActionName: Gameplay/Place[/XInputControllerWindows/buttonSouth]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 2156268990559507150}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: RotateBrickRight
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -184,13 +161,13 @@ MonoBehaviour:
     m_ActionName: Gameplay/RotateLeft[/XInputControllerWindows/leftTrigger]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 2156268990559507150}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: RotateBrickLeft
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -230,8 +207,68 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 06596642-016d-47bb-987e-326d7bd0dbb0
     m_ActionName: Gameplay/PrevItem[/XInputControllerWindows/leftShoulder,/XInputControllerWindows1/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2156268990559507150}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: SecondaryUse
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 314d41f8-a479-48bb-a896-715d75f35834
+    m_ActionName: Gameplay/SecondaryUse[/XInputControllerWindows1/buttonEast,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2156268990559507150}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: VoteToEnd
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 03f983f5-6889-4ebb-b7f9-110086096d76
+    m_ActionName: Gameplay/VoteToEnd[/XInputControllerWindows1/buttonWest,/XInputControllerWindows/buttonWest]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &2156268990559507150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2156268990559507137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f744f7545800a34da0a77f660b0ff28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 6
+  maxItemDist: 5
+  minItemDist: 1
+  minxItemDist: 1.5
+  smoothness: 0.1
+  playerPosOffset: {x: 2, y: -1}
+  brickHeight: 0.025
+  brickPlaceSoundID: 0
+  mortarCost: 0.2
+  mortarPlaceSoundID: 2
+  refilSoundID: 3
+  currentItem: 0
+  dataDisplay: {fileID: 0}
+  heldItemGO: {fileID: 0}
+  heldItemPrefab: {fileID: 2448028366722993204, guid: ba1be51bd66c5a74bb69bd45e9e6a2e7, type: 3}
+  brickPrefab: {fileID: 5517081590732063391, guid: ba6990390c2d8564f8b2be164644f54b, type: 3}
