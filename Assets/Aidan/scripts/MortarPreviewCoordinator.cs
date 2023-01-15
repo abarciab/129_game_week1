@@ -62,8 +62,9 @@ public class MortarPreviewCoordinator : MonoBehaviour
 
     bool CursorInSweetSpot()
     {
-        print("localPos.x: " + cursor.transform.localPosition.x);
-        return cursor.transform.localPosition.x > bonusStartPos && cursor.transform.localPosition.x < bonusEndPos;
+        bool sucsess = cursor.transform.localPosition.x > bonusStartPos && cursor.transform.localPosition.x < bonusEndPos;
+        if (sucsess) AudioManager.instance.PlaySound(8, gameObject);
+        return sucsess;
     }
 
     private void Update()

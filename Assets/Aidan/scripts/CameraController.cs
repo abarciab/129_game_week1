@@ -35,8 +35,7 @@ public class CameraController : MonoBehaviour
         Vector3 towerTop = transform.position;
         towerTop.y = GameManager.instance.towerTop + 10;
         if (!InCamBounds(towerTop, 0f)) {
-            print("zoom out");
-            cam.orthographicSize += zoomSpeed * 200;
+            cam.orthographicSize += zoomSpeed * 10;
         }
     }
 
@@ -55,14 +54,14 @@ public class CameraController : MonoBehaviour
     {
         bool allVisible = true;
         foreach (var p in players) {
-            if (InCamBounds(p.heldItemGO.transform.position)) {
+            if (cam.orthographicSize < sizeMinMax.y && !InCamBounds(p.heldItemGO.transform.position, 0.1f)) {
                 cam.orthographicSize += zoomSpeed;
                 allVisible = false;
             }
         }
         if (!allVisible) return;
         foreach (var p in players) {
-            if (InCamBounds(p.heldItemGO.transform.position, 0.25f)) {
+            if (cam.orthographicSize > sizeMinMax.x && InCamBounds(p.heldItemGO.transform.position, 0.25f)) {
                 cam.orthographicSize -= zoomSpeed;
                 allVisible = false;
             }

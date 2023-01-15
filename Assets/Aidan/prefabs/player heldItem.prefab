@@ -253,6 +253,8 @@ MonoBehaviour:
   selectedBricks: []
   player: {fileID: 0}
   MortarRefilled: 0
+  xMinMaxBricks: {x: 0.1, y: 0.2}
+  yMinMaxBricks: {x: 0.1, y: 0.4}
 --- !u!1 &3605408678484243530
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,8 +643,8 @@ MonoBehaviour:
   cursorSpeed: 0.35
   cursorStartPos: -0.5
   cursorEndPos: 0.5
-  bonusStartPos: 0.154
-  bonusEndPos: 0.248
+  bonusStartPos: 0.13
+  bonusEndPos: 0.26
   minNormalBonusAmount: {x: 0.5, y: 1, z: 2.5}
   enoughMortar: 1
 --- !u!61 &555053641478629404

@@ -18,6 +18,9 @@ public class HeldItemCoordinator : MonoBehaviour
     [HideInInspector] public PlayerController player;
     [HideInInspector] public float MortarRefilled;
 
+    [SerializeField] Vector2 xMinMaxBricks;
+    [SerializeField] Vector2 yMinMaxBricks;
+
     private void Start()
     {
         ChangeItem(PlayerController.ItemType.Brick);
@@ -41,5 +44,10 @@ public class HeldItemCoordinator : MonoBehaviour
                 break;
         }
     }
-    
+
+    public void GetNewBrickSize()
+    {
+        brickGO.transform.localScale = new Vector3(Random.Range(xMinMaxBricks.x, xMinMaxBricks.y), Random.Range(yMinMaxBricks.x, yMinMaxBricks.y), 1);
+    }
+
 }

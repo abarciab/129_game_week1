@@ -192,7 +192,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &5517081590732063385
 BoxCollider2D:
@@ -237,6 +237,9 @@ MonoBehaviour:
   mortarVisual: {fileID: 3405396238885998085}
   plasterVisual: {fileID: 7426102272711094177}
   jointStrength: 200
+  plasterDecayRate: 1
+  plasterThreshold: 4
+  dustCloudPrefab: {fileID: 8982068241824938862, guid: 1f9fad25e3c8bc54f905b7f46b006720, type: 3}
 --- !u!1 &7426102272711094177
 GameObject:
   m_ObjectHideFlags: 0

@@ -208,19 +208,7 @@ MonoBehaviour:
     m_ActionId: 06596642-016d-47bb-987e-326d7bd0dbb0
     m_ActionName: Gameplay/PrevItem[/XInputControllerWindows/leftShoulder,/XInputControllerWindows1/leftShoulder]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2156268990559507150}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: SecondaryUse
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 314d41f8-a479-48bb-a896-715d75f35834
     m_ActionName: Gameplay/SecondaryUse[/XInputControllerWindows1/buttonEast,/XInputControllerWindows/buttonEast]
   - m_PersistentCalls:
@@ -265,8 +253,8 @@ MonoBehaviour:
   brickHeight: 0.025
   brickPlaceSoundID: 0
   mortarCost: 0.2
-  mortarPlaceSoundID: 2
-  refilSoundID: 3
+  mortarPlaceSoundID: 1
+  refilSoundID: 2
   currentItem: 0
   dataDisplay: {fileID: 0}
   heldItemGO: {fileID: 0}
