@@ -11,9 +11,9 @@ public class Advance : MonoBehaviour
     public void Next()
     {
         if(line == 0)
-            _title.text = "My tower has fallen down,";
+            _title.text = "I request your assistance. \nMy tower has fallen down,";
         else if(line ==1)
-            _title.text = "and right before the Annual Wizarding Convention, no less!";
+            _title.text = "and right before the Annual Wizarding Convention, \nno less!";
         else if(line == 2)
             _title.text = "Will you help me rebuild it in time for the event?";
         else if(line ==3)
@@ -23,4 +23,38 @@ public class Advance : MonoBehaviour
         
         line++;
     }
+
+    public GameObject pages;
+    public int page = 0;
+
+    private void PagePicker()
+    {
+        for (int i = 0; i < pages.transform.childCount; i++)
+        {
+            GameObject child = pages.transform.GetChild(i).gameObject;
+            child.SetActive(false);
+
+            if (page == i)
+                child.SetActive(true);
+        }
+
+        if (page < 0)
+            SceneManager.LoadScene("MainMenu");
+        if (page > 2)
+            SceneManager.LoadScene("MainMenu");
+    }
+
+
+    public void NextPage()
+    {
+        page++;
+        PagePicker();
+    }
+
+    public void PreviousPage()
+    {
+        page--;
+        PagePicker();
+    }
+
 }
