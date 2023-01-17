@@ -40,7 +40,7 @@ public class Advance : MonoBehaviour
 
         if (page < 0)
             SceneManager.LoadScene("MainMenu");
-        if (page > 2)
+        if (page > 1)
             SceneManager.LoadScene("MainMenu");
     }
 
