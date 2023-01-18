@@ -10,6 +10,7 @@ public class HeldItemCoordinator : MonoBehaviour
     public GameObject brickGO;
     public GameObject mortarGO;
     [SerializeField] GameObject plasterGO;
+    [SerializeField] GameObject hammerGO;
 
     [HideInInspector] public GameObject selectedBrick;
     //[HideInInspector] public List<GameObject> selectedBricks = new List<GameObject>();
@@ -21,6 +22,8 @@ public class HeldItemCoordinator : MonoBehaviour
     [SerializeField] Vector2 xMinMaxBricks;
     [SerializeField] Vector2 yMinMaxBricks;
 
+    public SpriteRenderer glowColor;
+
     private void Start()
     {
         ChangeItem(PlayerController.ItemType.Brick);
@@ -31,6 +34,7 @@ public class HeldItemCoordinator : MonoBehaviour
         brickGO.SetActive(false);
         mortarGO.SetActive(false);
         plasterGO.SetActive(false);
+        hammerGO.SetActive(false);
 
         switch (newItem) {
             case PlayerController.ItemType.Brick:
@@ -41,6 +45,9 @@ public class HeldItemCoordinator : MonoBehaviour
                 break;
             case PlayerController.ItemType.Plaster:
                 plasterGO.SetActive(true);
+                break;
+            case PlayerController.ItemType.Hammer:
+                hammerGO.SetActive(true);
                 break;
         }
     }

@@ -29,13 +29,15 @@ public class CameraController : MonoBehaviour
 
     void PanToShowTower()
     {
+        if (GameManager.instance.roof == null) return;
+
         Vector3 targetPos = transform.position;
-        targetPos.y = Mathf.Max(GameManager.instance.towerTop / 2, camYMin);
+        targetPos.y = Mathf.Max(GameManager.instance.currentHeight / 2, camYMin);
         transform.position = Vector3.Lerp(transform.position, targetPos, 0.025f);
         Vector3 towerTop = transform.position;
-        towerTop.y = GameManager.instance.towerTop + 10;
+        towerTop.y = GameManager.instance.roof.transform.position.y + 10;
         if (!InCamBounds(towerTop, 0f)) {
-            cam.orthographicSize += zoomSpeed * 10;
+            cam.orthographicSize += zoomSpeed * 100;
         }
     }
 
@@ -43,7 +45,7 @@ public class CameraController : MonoBehaviour
     {
         Vector3 total = Vector3.zero;
         foreach (var p in players) total += p.heldItemGO.transform.position;
-        Vector3 targetPos = total / players.Count;
+        Vector3 targetPos = total / players.Count; 
         targetPos.z = transform.position.z;
         targetPos.y = Mathf.Max(targetPos.y, camYMin);
         transform.position = Vector3.Lerp(transform.position, targetPos, panSmoothness);

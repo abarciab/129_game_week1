@@ -20,9 +20,12 @@ public class Brick : MonoBehaviour
     [SerializeField] float dusCouldTime = 1f;
     [SerializeField] int collisionSoundID = 3;
 
+    [SerializeField] List<Sprite> spriteOptions = new List<Sprite>(); 
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        GetComponent<SpriteRenderer>().sprite = spriteOptions[Random.Range(0, spriteOptions.Count)];
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -55,6 +58,7 @@ public class Brick : MonoBehaviour
 
     void KillBrick()
     {
+        AudioManager.instance.PlaySound(12);
         Instantiate(dustCloudPrefab, transform.position, Quaternion.identity);
         GameManager.instance.bricks.Remove(this);
         Destroy(gameObject);

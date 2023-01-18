@@ -36,7 +36,7 @@ public class BrickPreviewCoordinator : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.x < GameManager.instance.bounds.x || transform.position.y > GameManager.instance.bounds.y) valid = false;
+        if (transform.position.x < GameManager.instance.bounds.x || transform.position.x > GameManager.instance.bounds.y) valid = false;
 
         heldScript.valid = valid;
     }

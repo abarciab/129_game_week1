@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public enum ItemType { Brick, Mortar, Plaster}
+    public enum ItemType { Brick, Mortar, Plaster, Hammer}
 
     [Header("movement")]
     [SerializeField] float speed;
@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public GameObject heldItemGO;
     HeldItemCoordinator HIcoord;
     PlayerControls controls;
+    [HideInInspector] public ToolSwitching switcherScript;
+    public Sprite characterImg;
 
     [Header("Prefabs")]
     [SerializeField] GameObject heldItemPrefab;
@@ -51,6 +53,10 @@ public class PlayerController : MonoBehaviour
         HIcoord = heldItemGO.GetComponent<HeldItemCoordinator>();
         HIcoord.player = this;
         GameManager.instance.RegisterNewPlayer(this);
+
+        transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = characterImg;
+        switcherScript.SwitchTool(currentItem);
+        switcherScript.SetVoteGraphics(false);
         
         CameraController.instance.players.Add(this);
     }
@@ -62,6 +68,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        switcherScript.SetMortarValue(mortarRemaining);
+
         if (dataDisplay != null) dataDisplay.text = gameObject.name + ": " + currentItem;
 
         if (heldItemGO.transform.position.x < GameManager.instance.bounds.x && move.x < 0 || heldItemGO.transform.position.x > GameManager.instance.bounds.y && move.x > 0) return;
@@ -124,8 +132,14 @@ public class PlayerController : MonoBehaviour
 
          if(!HIcoord.valid) return;
 
+        if (currentItem == ItemType.Hammer) BreakBrick();
         if (currentItem == ItemType.Brick && ctx.started) PlaceBrick();
         if (currentItem == ItemType.Plaster && ctx.started) PlasterBricks();
+    }
+
+    void BreakBrick()
+    {
+        Destroy(HIcoord.selectedBrick);
     }
 
     void PlasterBricks()
@@ -147,8 +161,8 @@ public class PlayerController : MonoBehaviour
     public void VoteToEnd(InputAction.CallbackContext ctx)
     {
         if (!ctx.started) return;
-
         GameManager.instance.ToggleEndVote(this);
+        switcherScript.SetVoteGraphics(GameManager.instance.votesToEnd.Contains(this));
     }
     
     public void RefillMortar(float amount)
@@ -161,7 +175,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!ctx.started) return;
 
-        if ((int) currentItem < 2)
+        if ((int) currentItem < 3)
             currentItem += 1;
         else currentItem = 0;
         UpdateHeldItemDisplay();
@@ -173,12 +187,14 @@ public class PlayerController : MonoBehaviour
 
         if ((int)currentItem > 0)
             currentItem -= 1;
-        else currentItem = (ItemType) 2;
+        else currentItem = (ItemType) 3;
         UpdateHeldItemDisplay();
     }
 
     void UpdateHeldItemDisplay()
     {
+        if (HIcoord == null) return;
+        switcherScript.SwitchTool(currentItem);
         AudioManager.instance.PlaySound(7, gameObject);
         HIcoord.ChangeItem(currentItem);
     }
@@ -213,6 +229,7 @@ public class PlayerController : MonoBehaviour
     void MoveCharacter()
     {
         left = heldItemGO.transform.position.x > 0;
+        transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = left;
 
         Vector3 offset = new Vector3(left ? playerPosOffset.x : playerPosOffset.x * -1, playerPosOffset.y, 0);
         var distY = Mathf.Abs(transform.position.y - heldItemGO.transform.position.y);

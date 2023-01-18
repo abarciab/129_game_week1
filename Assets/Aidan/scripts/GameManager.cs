@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.XR.Haptics;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
@@ -17,24 +18,26 @@ public class GameManager : MonoBehaviour {
     public float time;
     [SerializeField] Gradient skyGradient;
     [SerializeField] SpriteRenderer skyColorSprite;
-    int daysPassed;
+    [HideInInspector] public int daysPassed;
     [SerializeField] int dayLimit = 5;
 
     [Header("Score data")]
-    public float towerTop;
+    public float currentHeight;
     public float plasterCoverage;
+    bool gameOver;
 
     [Header("Misc")]
-    [SerializeField] float heightUpdateFrequency = 1;
-    float heightUpdateCooldown;
     [SerializeField] float loseGameThreshold = 10;
     [SerializeField] float brickScale;
     List<PlayerController> players = new List<PlayerController>();
-    List<PlayerController> votesToEnd = new List<PlayerController>();
+    [HideInInspector] public List<PlayerController> votesToEnd = new List<PlayerController>();
     [SerializeField] GameObject roofPrefab;
     public Vector2 bounds = new Vector2(-20, 20);
     [HideInInspector] public List<Brick> bricks = new List<Brick>();
     public Vector2 towerBaseBounds = new Vector2(-3, 3);
+    [HideInInspector] public GameObject roof;
+    [SerializeField] List<Sprite> characterSprites = new List<Sprite>();
+    public List<Color> charColors = new List<Color>();
 
     [Header("Tower width checking")]
     [SerializeField] float minTowerWidth = 3;
@@ -54,6 +57,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TextMeshProUGUI plasterCoverText, daysRemainingText;
     [SerializeField] List<TextMeshProUGUI> playerDisplay = new List<TextMeshProUGUI>();
     [SerializeField] GameObject loseScreen, winScreen;
+    [SerializeField] List<ToolSwitching> switcherScripts = new List<ToolSwitching>(); 
     public Transform towerParent;
     float bestHeight;
 
@@ -62,7 +66,12 @@ public class GameManager : MonoBehaviour {
         players.Add(newPlayer);
         newPlayer.gameObject.name = "Player" + players.Count;
         newPlayer.dataDisplay = playerDisplay[players.Count - 1];
-        heightUpdateCooldown = heightUpdateFrequency;
+        switcherScripts[players.Count - 1].Activate();
+        newPlayer.switcherScript = switcherScripts[players.Count - 1];
+        newPlayer.switcherScript.charColor = charColors[players.Count - 1];
+        newPlayer.characterImg = characterSprites[players.Count - 1];
+        newPlayer.heldItemGO.GetComponent<HeldItemCoordinator>().glowColor.color = charColors[players.Count - 1];
+        AudioManager.instance.PlaySound(14, newPlayer.gameObject);
     }
 
     void Update()
@@ -70,35 +79,42 @@ public class GameManager : MonoBehaviour {
         //ProcessHeight();
         DoDayNightCycle();
         CalculatePlasterCoverage();
-        ProcessTowerWidth();
+        var leftRight = new Vector2();
+        currentHeight = GetCurrentHeight(out leftRight);
+        ProcessTowerWidth(leftRight);
+        if (!gameOver && currentHeight > minTowerHeight && bestHeight - currentHeight >= loseGameThreshold) LoseGame();
     }
 
-    void ProcessTowerWidth()
+    float GetCurrentHeight(out Vector2 leftRight)
     {
-        Vector2 leftRight = new Vector2();
-        float height = GetHighestWidePoint(out leftRight);
-        towerTopText.text = "height: " + height;
-        Vector3 targetPos = new Vector3(leftRight.x, height, 0);
+        float newHeight = GetHighestWidePoint(out leftRight);
+        if (newHeight > bestHeight) bestHeight = newHeight;
+        return newHeight;
+    }
+
+    void ProcessTowerWidth(Vector2 leftRight)
+    {
+        towerTopText.text = "height: " + bestHeight;
+        Vector3 targetPos = new Vector3(leftRight.y, bestHeight, 0);
         towerTopText.transform.parent.position = Vector3.Lerp(towerTopText.transform.parent.position, targetPos, 0.025f);
     }
 
     float GetHighestWidePoint(out Vector2 leftRight)
     {
-        bool foundPoint = false;
         float checkingHeight = minTowerHeight;
-        float bestHeigt = minTowerHeight;
+        float _bestHeigt = minTowerHeight;
         leftRight = new Vector2();
-        while (!foundPoint && checkingHeight < maxTowerHeight) {
+        while (checkingHeight < maxTowerHeight) {
             Vector2 newLeftRight;
             var widthAtCheckingHeight = BoxCastWidthCheck(out newLeftRight, checkingHeight);
             if (widthAtCheckingHeight >= minTowerWidth) {
-                bestHeight = checkingHeight;
-                leftRight = newLeftRight; 
+                _bestHeigt = checkingHeight;
+                leftRight = newLeftRight;
+                checkingHeight += bcVerticalGap;
             }
             else break;
-            checkingHeight += bcVerticalGap;
         }
-        return bestHeight;
+        return _bestHeigt;
     }
 
     float BoxCastWidthCheck(out Vector2 leftRight, float yPos)
@@ -153,7 +169,6 @@ public class GameManager : MonoBehaviour {
                 var pos = _positions[longestChain[i]] + Vector2.up * 2f;
                 if (!gizmosTestDraw.Contains((pos))) gizmosTestDraw.Add(pos);
             }
-            print("longestChain: " + chainString);
         }
         return longestChain;
     }
@@ -194,7 +209,6 @@ public class GameManager : MonoBehaviour {
         if (showBC) {
             string hitString = "";
             for (int i = 0; i < bcResults.Count; i++) { if (bcResults[i]) hitString += i + ", "; }
-            print("Hits: " + hitString);
         }
         return bcResults;
     }
@@ -245,11 +259,16 @@ public class GameManager : MonoBehaviour {
         if (votesToEnd.Count == players.Count) DropRoof();
     }
 
+    bool roofDropped;
+
     void DropRoof()
     {
+        if (roofDropped) return;
+
+        roofDropped = true;
         var roofSpawnPos = GetTopBrickPos().transform.position;
         roofSpawnPos.y = GetHighestPlayer() + 30;
-        var roof = Instantiate(roofPrefab, roofSpawnPos, Quaternion.identity, towerParent);
+        roof = Instantiate(roofPrefab, roofSpawnPos, Quaternion.identity, towerParent);
     }
 
     float GetHighestPlayer()
@@ -265,7 +284,6 @@ public class GameManager : MonoBehaviour {
     {
         float top = Mathf.NegativeInfinity;
         Brick topBrick = null;
-        print("count: " + bricks.Count);
         for (int i = 0; i < bricks.Count; i++) {
             if (bricks[i] == null) continue;
 
@@ -281,6 +299,7 @@ public class GameManager : MonoBehaviour {
     {
         AudioManager.instance.PlaySound(9);
         winScreen.SetActive(true);
+        winScreen.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Final Height: " + bestHeight;
         EndGame();
     }
 
@@ -295,34 +314,11 @@ public class GameManager : MonoBehaviour {
         daysRemainingText.text = "Days Remaining: " + Mathf.Max((dayLimit - daysPassed), 1);
     }
 
-    void ProcessHeight()
-    {
-        heightUpdateCooldown -= Time.deltaTime;
-        if (heightUpdateCooldown <= 0) UpdateHeight();
-    }
-
-    void UpdateHeight()
-    {
-        if (bricks.Count == 0) return;
-        float floor = bricks[0].transform.position.y;
-        heightUpdateCooldown = heightUpdateFrequency;
-        float top = 0;
-        foreach (var b in bricks) {
-            if (b.transform.position.y > top) top = (b.transform.position.y - floor) * brickScale;
-        }
-        //var top = GetLongestChainLeftPos().y * brickScale;
-
-        string topString = top != 0 ? Mathf.FloorToInt(top).ToString() : "0";
-        if (top != towerTop) towerTopText.text = "Current Height: " + topString + "m";
-        if (top > bestHeight) bestHeight = top;
-        if (bestHeight - top >= loseGameThreshold) LoseGame();
-        towerTop = top;
-    }
-
     void LoseGame()
     {
         AudioManager.instance.PlaySound(4);
         loseScreen.SetActive(true);
+        gameOver = true;
         EndGame();
     }
 
